@@ -1,5 +1,5 @@
 P = prettybtab
-OBJS = main.o
+OBJS = main.o note_table.o
 CFLAGS = -g -Wall -Wstrict-prototypes
 LDLIBS = -lb
 
