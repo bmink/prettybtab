@@ -13,6 +13,8 @@ main(int argc, char **argv)
 	char	*execn;
 	barr_t	*notes;
 	int	ret;
+	bstr_t	*note;
+	int	idx;
 
 	err = 0;
 	notes = NULL;
@@ -46,12 +48,25 @@ main(int argc, char **argv)
 			err = ret;
 			goto end_label;
 		}
-
-		printf("Got %d notes\n", barr_cnt(notes));
 	}
+
+	printf("Got %d note(s).\n", barr_cnt(notes));
+
+	idx = 0;
+	for(note = (bstr_t *) barr_begin(notes);
+	    note < (bstr_t *) barr_end(notes);
+	    ++note) {
+		printf("%d. (%d) %s\n", idx, bstrlen(note), bget(note));
+		++idx;
+	}
+	
 
 	
 end_label:
+
+	
+
+	
 
 	return err?EINVAL:0;
 }
