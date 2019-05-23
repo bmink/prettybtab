@@ -6,18 +6,32 @@
 
 void usage(char *);
 
+#define PBT_STRINGCNT	4
+
+char *string_pref[PBT_STRINGCNT] = {
+	"G ---",
+	"D ---",
+	"A ---",
+	"E ---"
+};
+
+
 int
 main(int argc, char **argv)
 {
 	int	err;
 	char	*execn;
+	int	i;
+	bstr_t	*note;
 	barr_t	*notes;
 	int	ret;
-	bstr_t	*note;
-	int	idx;
+	bstr_t	*strings[PBT_STRINGCNT];
 
 	err = 0;
 	notes = NULL;
+	for(i = 0; i < PBT_STRINGCNT; ++i) {
+		strings[i] = NULL;
+	}
 
 	if(xstrempty(argv[0])) {
 		fprintf(stderr, "Invalid argv[0]\n");
@@ -52,21 +66,51 @@ main(int argc, char **argv)
 
 	printf("Got %d note(s).\n", barr_cnt(notes));
 
-	idx = 0;
 	for(note = (bstr_t *) barr_begin(notes);
 	    note < (bstr_t *) barr_end(notes);
 	    ++note) {
-		printf("%d. (%d) %s\n", idx, bstrlen(note), bget(note));
-		++idx;
+		printf("(%d) %s\n", bstrlen(note), bget(note));
+	}
+
+	for(i = 0; i < PBT_STRINGCNT; ++i) {
+		strings[i] = binit();
+		if(strings[i] == NULL) {
+			fprintf(stderr,
+			    "Couldn't allocate buffer for string\n");
+			err = ENOMEM;
+			goto end_label;
+		}
+		bstrcat(strings[i], string_pref[i]);
 	}
 	
+
+	for(note = (bstr_t *) barr_begin(notes);
+	    note < (bstr_t *) barr_end(notes);
+	    ++note) {
+	}
+
+	for(i = 0; i < PBT_STRINGCNT; ++i) {
+		printf("%s\n", bget(strings[i]));
+	}
 
 	
 end_label:
 
-	
 
-	
+	if(notes != NULL) {
+		for(note = (bstr_t *) barr_begin(notes);
+		    note < (bstr_t *) barr_end(notes);
+		    ++note) {
+			buninit_(note);
+		}
+		barr_uninit(&notes);
+	}
+
+	for(i = 0; i < PBT_STRINGCNT; ++i) {
+		if(strings[i] != NULL) {
+			buninit(&strings[i]);
+		}
+	}
 
 	return err?EINVAL:0;
 }
