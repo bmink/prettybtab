@@ -6,11 +6,13 @@ Usage: prettybtab [notes]
 
 The above example argument produces:
 
+```
 G --------------------3-------------------------------------------------------
 D -----------3-----------3----------------------------------------------------
 A -----2----------------------------------------------------------------------
 E --0-------------------------------------------------------------------------
     E  B     F        A# F  
+```
 
 Note, prettybtab is basic and does not have a lot of features. The idea is
 that you call it frequently, feeding it enough notes for a line or so, then
